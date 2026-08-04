@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Verification Results - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-8">
+            
+            {% if verified %}
+                {% if badge.status == 'issued' %}
+                    <!-- VERIFIED CARD SUCCESS -->
+                    <div class="card card-premium shadow-lg border-success mb-4">
+                        <div class="card-header bg-success text-white text-center py-3">
+                            <h4 class="mb-0 fw-bold"><i class="fa-solid fa-circle-check me-2"></i> Verified Digital Credential</h4>
+                            <span class="small opacity-75">This credential has been verified against our database.</span>
+                        </div>
+                        
+                        <div class="card-body p-4">
+                            
+                            <!-- Certificate Visual Render -->
+                            <div class="badge-frame mb-4" style="border: 2px solid {{ template.get('border_color', '#f1c40f') }};">
+                                <div class="badge-frame-inner" style="border-color: {{ template.get('border_color', '#f1c40f') }};">
+                                    <div class="badge-stamp" style="background: linear-gradient(135deg, {{ template.get('border_color', '#f1c40f') }}, #1e293b)">
+                                        <i class="fa-solid fa-graduation-cap"></i>
+                                    </div>
+                                    <h4 class="fw-bold mb-1" style="color: {{ template.get('font_color', '#1e293b') }}">{{ template.get('title', 'Achievement Badge') }}</h4>
+                                    <p class="text-muted small mb-3">Issued by <strong>{{ organization.name }}</strong></p>
+                                    
+                                    <div class="my-4">
+                                        <span class="text-muted d-block small">THIS BADGE IS OFFICIALLY CONFERRED UPON</span>
+                                        <h3 class="fw-bold text-primary">{{ student.name }}</h3>
+                                    </div>
+                                    
+                                    <div class="my-3">
+                                        <span class="text-muted d-block small">FOR DEMONSTRATING EXCELLENCE IN</span>
+                                        <h5 class="fw-bold text-dark">{{ course.course_name }} ({{ course.course_code }})</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Details Row -->
+                            <div class="row align-items-center bg-light rounded p-3 mb-4">
+                                <div class="col-md-7">
+                                    <h5 class="fw-bold mb-3 text-secondary">Credential Metadata</h5>
+                                    <table class="table table-sm table-borderless mb-0">
+                                        <tr>
+                                            <td class="fw-semibold" style="width: 140px;">Recipient Name:</td>
+                                            <td>{{ student.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Roll Number:</td>
+                                            <td>{{ student.roll_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Issuing Body:</td>
+                                            <td>{{ organization.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Issuance Date:</td>
+                                            <td>{{ badge.issued_date.strftime('%B %d, %Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Credential ID:</td>
+                                            <td class="text-break"><code class="small">{{ badge.badge_id }}</code></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-5 text-center mt-3 mt-md-0 border-start-md">
+                                    <p class="fw-semibold text-secondary mb-2">Verification QR Code</p>
+                                    <img src="{{ badge.qr_code_path }}" alt="Verification QR Code" class="img-fluid rounded border shadow-sm" style="max-height: 120px;">
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                <a href="{{ badge.pdf_path }}" class="btn btn-accent px-4 py-2" target="_blank">
+                                    <i class="fa-solid fa-file-pdf me-2"></i> Download PDF Certificate
+                                </a>
+                                <a href="https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name={{ course.course_name }}&organizationName={{ organization.name }}&certId={{ badge.badge_id }}&certUrl={{ request.url }}" 
+                                   class="btn btn-outline-primary px-4 py-2" target="_blank">
+                                    <i class="fa-brands fa-linkedin me-2"></i> Add to LinkedIn
+                                </a>
+                                <a href="{{ url_for('public.index') }}" class="btn btn-outline-secondary px-4 py-2">
+                                    <i class="fa-solid fa-circle-left me-2"></i> Back
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- REVOKED CARD FAILURE -->
+                    <div class="card card-premium shadow-lg border-danger text-center p-5">
+                        <div class="text-danger mb-4">
+                            <i class="fa-solid fa-circle-xmark fa-5x"></i>
+                        </div>
+                        <h2 class="fw-bold text-dark mb-2">Credential Revoked</h2>
+                        <p class="text-muted leading-relaxed mb-4">
+                            The Badge ID <code>{{ badge.badge_id }}</code> is in our records, but has been <strong>officially revoked</strong> by the issuing organization.
+                        </p>
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{{ url_for('public.index') }}" class="btn btn-accent px-4"><i class="fa-solid fa-house me-1"></i> Home</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <!-- NOT FOUND CARD -->
+                <div class="card card-premium shadow-lg border-warning text-center p-5">
+                    <div class="text-warning mb-4">
+                        <i class="fa-solid fa-triangle-exclamation fa-5x"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-2">Credential Not Found</h2>
+                    <p class="text-muted leading-relaxed mb-4">
+                        The requested Badge ID: <code>{{ badge_id }}</code> does not match any valid digital credential issued by this platform.
+                    </p>
+                    <div class="alert alert-secondary small mb-4">
+                        <strong>Security Note:</strong> Please make sure you copied the hash ID correctly from your certificate or that the link QR was not altered.
+                    </div>
+                    <hr class="my-4">
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{{ url_for('public.index') }}" class="btn btn-accent px-4"><i class="fa-solid fa-house me-1"></i> Return Home</a>
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

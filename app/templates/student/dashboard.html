@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}My Student Portfolio - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Student Profile Hero Header -->
+    <div class="card card-premium shadow-sm p-4 bg-dark text-white mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-2 text-center">
+                <div class="badge-stamp bg-warning text-dark mx-auto" style="width: 90px; height: 90px; font-size: 2.2rem;">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+            </div>
+            <div class="col-md-10 mt-3 mt-md-0 text-center text-md-start">
+                <h2 class="fw-bold mb-1">{{ student.name }}</h2>
+                <p class="text-warning mb-2 fw-semibold"><i class="fa-solid fa-id-card me-1"></i> Student Roll Number: <code>{{ student.roll_number }}</code></p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start small text-muted">
+                    <span><i class="fa-solid fa-envelope me-1"></i> {{ student.email }}</span>
+                    <span><i class="fa-solid fa-calendar me-1"></i> Member Since: {{ student.created_at.strftime('%Y-%m-%d') if student.created_at }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h3 class="fw-bold text-dark mb-0"><i class="fa-solid fa-award text-warning me-2"></i> My Issued Badges</h3>
+        <span class="badge bg-secondary py-2 px-3 fw-bold">{{ badges|length }} Credentials</span>
+    </div>
+
+    <!-- Badges Grid View -->
+    {% if badges %}
+        <div class="row g-4">
+            {% for badge in badges %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-premium shadow-sm h-100" style="border-top: 5px solid {{ badge.border_color }};">
+                        <div class="card-body p-4 text-center d-flex flex-column">
+                            <div class="badge-stamp mb-3 mx-auto" style="background: linear-gradient(135deg, {{ badge.border_color }}, #1e293b)">
+                                <i class="fa-solid fa-certificate"></i>
+                            </div>
+                            <h5 class="fw-bold mb-1" style="color: {{ badge.font_color }}">{{ badge.template_title }}</h5>
+                            <span class="text-muted d-block small mb-3">Issued by {{ badge.org_name }}</span>
+                            
+                            <div class="alert alert-light py-2 px-3 mb-4 rounded border">
+                                <span class="d-block small text-muted">Course Conferred:</span>
+                                <span class="fw-bold text-dark">{{ badge.course_name }}</span>
+                                <code class="small d-block text-primary">({{ badge.course_code }})</code>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="mt-auto pt-3 border-top d-grid gap-2">
+                                <a href="{{ url_for('public.verify_badge', badge_id=badge.badge_id) }}" class="btn btn-outline-dark btn-sm">
+                                    <i class="fa-solid fa-square-poll-horizontal me-1"></i> View Verification Details
+                                </a>
+                                <a href="{{ badge.pdf_path }}" class="btn btn-accent btn-sm" target="_blank">
+                                    <i class="fa-solid fa-file-pdf me-1"></i> Download PDF Certificate
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card p-5 text-center bg-white border rounded">
+            <div class="text-muted mb-3">
+                <i class="fa-solid fa-award fa-4x opacity-25"></i>
+            </div>
+            <h4 class="fw-bold text-dark">No Badges Yet</h4>
+            <p class="text-muted max-w-md mx-auto mb-0">
+                You haven't been issued any digital badges yet. Once your organization issues a credential to your email, it will dynamically appear here!
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

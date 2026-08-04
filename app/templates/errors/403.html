@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Access Forbidden - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container my-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-premium p-5 shadow border-danger">
+                <div class="text-danger mb-4">
+                    <i class="fa-solid fa-circle-exclamation fa-5x"></i>
+                </div>
+                <h1 class="fw-bold text-dark mb-2">403 Forbidden</h1>
+                <h3 class="text-muted mb-4">Access Denied</h3>
+                <p class="text-muted leading-relaxed">
+                    You do not have the required role clearances or authorizations to view this workspace page.
+                </p>
+                <hr class="my-4">
+                <a href="{{ url_for('public.index') }}" class="btn btn-accent px-4 py-2">
+                    <i class="fa-solid fa-home me-2"></i>Return to Homepage
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

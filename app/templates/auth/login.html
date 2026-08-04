@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center my-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="card card-premium p-4 shadow-lg">
+                <div class="text-center mb-4">
+                    <div class="badge-stamp mb-2">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark">Platform Login</h2>
+                    <p class="text-muted">Access your badging workspace</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <!-- Email Address -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-envelope text-muted"></i></span>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="name@domain.com" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-semibold">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-key text-muted"></i></span>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit button -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-accent btn-lg py-2">
+                            Sign In <i class="fa-solid fa-arrow-right-to-bracket ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-4 border-top pt-3">
+                    <p class="text-muted mb-0 small">
+                        Are you an institute? <a href="{{ url_for('auth.register_org') }}" class="text-decoration-none fw-bold text-accent">Register here</a>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Quick Assist for Examiners (Viva friendliness) -->
+            <div class="card bg-light border-0 mt-3 p-3 text-center">
+                <p class="mb-1 text-muted small"><i class="fa-solid fa-circle-question me-1 text-warning"></i> <strong>For Demonstration:</strong></p>
+                <code class="small d-block mb-1">Super Admin: admin@smallbadge.com / adminpassword123</code>
+                <code class="small d-block">Students log in using their roll number as the password!</code>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

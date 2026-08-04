@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Org Admin Dashboard - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3 col-lg-2 sidebar rounded mb-4">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('org.dashboard') }}"><i class="fa-solid fa-gauge me-2"></i> Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.courses') }}"><i class="fa-solid fa-book-open me-2"></i> Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.students') }}"><i class="fa-solid fa-users me-2"></i> Students List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.templates') }}"><i class="fa-solid fa-palette me-2"></i> Design Templates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.issue_badge') }}"><i class="fa-solid fa-circle-plus me-2"></i> Issue Badge</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
+                <h1 class="h2 fw-bold text-dark">Institution Dashboard</h1>
+                <a href="{{ url_for('org.issue_badge') }}" class="btn btn-accent"><i class="fa-solid fa-certificate me-2"></i> Issue New Badge</a>
+            </div>
+
+            <!-- Stats grid -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card card-premium p-3 text-center border-start border-4 border-primary">
+                        <div class="text-primary mb-2"><i class="fa-solid fa-book-open fa-2x"></i></div>
+                        <h5 class="text-muted">Courses Registered</h5>
+                        <h2 class="fw-bold">{{ courses_count }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-premium p-3 text-center border-start border-4 border-success">
+                        <div class="text-success mb-2"><i class="fa-solid fa-user-graduate fa-2x"></i></div>
+                        <h5 class="text-muted">Enrolled Students</h5>
+                        <h2 class="fw-bold">{{ students_count }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-premium p-3 text-center border-start border-4 border-info">
+                        <div class="text-info mb-2"><i class="fa-solid fa-palette fa-2x"></i></div>
+                        <h5 class="text-muted">Badge Layouts</h5>
+                        <h2 class="fw-bold">{{ templates_count }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-premium p-3 text-center border-start border-4 border-warning">
+                        <div class="text-warning mb-2"><i class="fa-solid fa-award fa-2x"></i></div>
+                        <h5 class="text-muted">Issued Badges</h5>
+                        <h2 class="fw-bold">{{ badges_issued }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Badges Issued Table Section -->
+            <div class="card card-premium shadow">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-list-check me-2"></i> Recently Issued Credentials</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_badges %}
+                        <div class="table-responsive">
+                            <table class="table align-middle table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Course Name</th>
+                                        <th>Issuance Date</th>
+                                        <th>Status</th>
+                                        <th>Verification Link</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for badge in recent_badges %}
+                                        <tr>
+                                            <td class="fw-bold">{{ badge.student[0].name if badge.student else 'N/A' }}</td>
+                                            <td>{{ badge.course[0].course_name if badge.course else 'N/A' }}</td>
+                                            <td>{{ badge.issued_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                            <td>
+                                                {% if badge.status == 'issued' %}
+                                                    <span class="badge bg-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Revoked</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ url_for('public.verify_badge', badge_id=badge.badge_id) }}" target="_blank" class="small text-break">
+                                                    Verify Link <i class="fa-solid fa-external-link ms-1"></i>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {% if badge.status == 'issued' %}
+                                                    <a href="{{ url_for('org.revoke_badge', badge_id=badge.badge_id) }}" 
+                                                       class="btn btn-outline-danger btn-sm"
+                                                       onclick="return confirm('Are you sure you want to revoke this digital badge? This action is permanent and will make the credential verification fail.');">
+                                                        <i class="fa-solid fa-ban me-1"></i> Revoke
+                                                    </a>
+                                                {% else %}
+                                                    <span class="text-muted small">Revoked</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-award fa-3x mb-2 text-warning"></i>
+                            <p class="mb-0">No badges have been issued yet. Start by adding courses and students!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

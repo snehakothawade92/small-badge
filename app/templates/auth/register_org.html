@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Organization - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center my-4">
+        <div class="col-md-8 col-lg-7">
+            <div class="card card-premium p-4 shadow-lg">
+                <div class="text-center mb-4">
+                    <div class="badge-stamp mb-2">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark">Register Organization</h2>
+                    <p class="text-muted">Register your college, training center, or organization to issue digital credentials</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('auth.register_org') }}">
+                    <h5 class="fw-bold border-bottom pb-2 mb-3 text-primary"><i class="fa-solid fa-hotel me-2"></i>Organization Details</h5>
+                    
+                    <div class="row">
+                        <!-- Org Name -->
+                        <div class="col-md-6 mb-3">
+                            <label for="org_name" class="form-label fw-semibold">Organization Name</label>
+                            <input type="text" name="org_name" id="org_name" class="form-control" placeholder="e.g. NIT Delhi" required>
+                        </div>
+                        
+                        <!-- Domain -->
+                        <div class="col-md-6 mb-3">
+                            <label for="org_domain" class="form-label fw-semibold">Email Domain</label>
+                            <input type="text" name="org_domain" id="org_domain" class="form-control" placeholder="e.g. nitdelhi.ac.in" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Contact Phone -->
+                        <div class="col-md-6 mb-3">
+                            <label for="contact_phone" class="form-label fw-semibold">Contact Number</label>
+                            <input type="tel" name="contact_phone" id="contact_phone" class="form-control" placeholder="e.g. +91 98765 43210" required>
+                        </div>
+                        
+                        <!-- Address -->
+                        <div class="col-md-6 mb-3">
+                            <label for="address" class="form-label fw-semibold">Physical Address</label>
+                            <input type="text" name="address" id="address" class="form-control" placeholder="City, Country" required>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold border-bottom pb-2 mb-3 mt-4 text-primary"><i class="fa-solid fa-user-shield me-2"></i>Administrator Account</h5>
+                    
+                    <div class="row">
+                        <!-- Admin Name -->
+                        <div class="col-md-6 mb-3">
+                            <label for="admin_name" class="form-label fw-semibold">Full Name</label>
+                            <input type="text" name="admin_name" id="admin_name" class="form-control" placeholder="Full Name" required>
+                        </div>
+                        
+                        <!-- Admin Email -->
+                        <div class="col-md-6 mb-3">
+                            <label for="admin_email" class="form-label fw-semibold">Work Email</label>
+                            <input type="email" name="admin_email" id="admin_email" class="form-control" placeholder="admin@domain.com" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-semibold">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+                    </div>
+                    
+                    <!-- Submit -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-accent btn-lg py-2">
+                            Submit Registration Request <i class="fa-solid fa-paper-plane ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

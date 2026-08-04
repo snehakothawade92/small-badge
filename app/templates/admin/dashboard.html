@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Super Admin Dashboard - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3 col-lg-2 sidebar rounded mb-4">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fa-solid fa-gauge me-2"></i> Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-solid fa-building me-2"></i> Organizations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-solid fa-users me-2"></i> Users List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-solid fa-clock-rotate-left me-2"></i> System Logs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Dashboard Body Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
+                <h1 class="h2 fw-bold text-dark">Platform Analytics Dashboard</h1>
+                <span class="badge bg-secondary p-2"><i class="fa-solid fa-shield-halved me-1"></i> Root Authorization</span>
+            </div>
+
+            <!-- Stats grid -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="card card-premium p-3 text-center border-start border-4 border-primary">
+                        <div class="text-primary mb-2"><i class="fa-solid fa-building fa-2x"></i></div>
+                        <h5 class="text-muted">Total Organizations</h5>
+                        <h2 class="fw-bold">{{ orgs_count }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-premium p-3 text-center border-start border-4 border-warning">
+                        <div class="text-warning mb-2"><i class="fa-solid fa-certificate fa-2x"></i></div>
+                        <h5 class="text-muted">Total Badges Issued</h5>
+                        <h2 class="fw-bold">{{ badges_count }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-premium p-3 text-center border-start border-4 border-success">
+                        <div class="text-success mb-2"><i class="fa-solid fa-users fa-2x"></i></div>
+                        <h5 class="text-muted">Registered Users</h5>
+                        <h2 class="fw-bold">{{ users_count }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Registrations Table Section -->
+            <div class="card card-premium shadow mb-4">
+                <div class="card-header bg-warning text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-envelope-open-text me-2"></i> Pending Organization Approvals</h5>
+                </div>
+                <div class="card-body">
+                    {% if pending_orgs %}
+                        <div class="table-responsive">
+                            <table class="table align-middle table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Domain</th>
+                                        <th>Contact Phone</th>
+                                        <th>Address</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for org in pending_orgs %}
+                                        <tr>
+                                            <td class="fw-bold">{{ org.name }}</td>
+                                            <td><code>@{{ org.domain }}</code></td>
+                                            <td>{{ org.contact_phone }}</td>
+                                            <td>{{ org.address }}</td>
+                                            <td>
+                                                <a href="{{ url_for('admin.approve_org', org_id=org._id) }}" class="btn btn-success btn-sm me-2">
+                                                    <i class="fa-solid fa-check me-1"></i> Approve
+                                                </a>
+                                                <a href="{{ url_for('admin.suspend_org', org_id=org._id) }}" class="btn btn-outline-danger btn-sm">
+                                                    <i class="fa-solid fa-xmark me-1"></i> Reject
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-circle-check fa-3x mb-2 text-success"></i>
+                            <p class="mb-0">All clear! No organizations are pending approval.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Approved Organizations List Section -->
+            <div class="card card-premium shadow">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-circle-check me-2"></i> Approved Organizations</h5>
+                </div>
+                <div class="card-body">
+                    {% if approved_orgs %}
+                        <div class="table-responsive">
+                            <table class="table align-middle table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Domain</th>
+                                        <th>Contact Phone</th>
+                                        <th>Registered Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for org in approved_orgs %}
+                                        <tr>
+                                            <td class="fw-bold">{{ org.name }}</td>
+                                            <td><code>@{{ org.domain }}</code></td>
+                                            <td>{{ org.contact_phone }}</td>
+                                            <td>{{ org.created_at.strftime('%Y-%m-%d') if org.created_at }}</td>
+                                            <td><span class="badge bg-success">Active</span></td>
+                                            <td>
+                                                <a href="{{ url_for('admin.suspend_org', org_id=org._id) }}" class="btn btn-outline-danger btn-sm">
+                                                    <i class="fa-solid fa-ban me-1"></i> Suspend
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No approved organizations found.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

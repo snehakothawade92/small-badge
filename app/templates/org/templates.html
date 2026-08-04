@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Templates - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3 col-lg-2 sidebar rounded mb-4">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.dashboard') }}"><i class="fa-solid fa-gauge me-2"></i> Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.courses') }}"><i class="fa-solid fa-book-open me-2"></i> Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.students') }}"><i class="fa-solid fa-users me-2"></i> Students List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('org.templates') }}"><i class="fa-solid fa-palette me-2"></i> Design Templates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.issue_badge') }}"><i class="fa-solid fa-circle-plus me-2"></i> Issue Badge</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Templates Management Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
+                <h1 class="h2 fw-bold text-dark">Badge Template Designer</h1>
+            </div>
+
+            <div class="row g-4">
+                <!-- Add Template Form Card -->
+                <div class="col-lg-4">
+                    <div class="card card-premium p-4 shadow-sm">
+                        <h4 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-wand-magic-sparkles me-2"></i> Create Design</h4>
+                        <form method="POST" action="{{ url_for('org.templates') }}">
+                            
+                            <div class="mb-3">
+                                <label for="title" class="form-label fw-semibold">Template Title</label>
+                                <input type="text" name="title" id="title" class="form-control" placeholder="e.g. Master Developer Badge" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="badge_description" class="form-label fw-semibold">Description</label>
+                                <textarea name="badge_description" id="badge_description" rows="2" class="form-control" placeholder="Conferred for showing core capability in..."></textarea>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label for="font_color" class="form-label fw-semibold">Font Color</label>
+                                    <input type="color" name="font_color" id="font_color" class="form-control form-control-color w-100" value="#1e293b">
+                                </div>
+                                <div class="col-6">
+                                    <label for="border_color" class="form-label fw-semibold">Border Color</label>
+                                    <input type="color" name="border_color" id="border_color" class="form-control form-control-color w-100" value="#f1c40f">
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-accent"><i class="fa-solid fa-palette me-2"></i> Save Template</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Template Table list -->
+                <div class="col-lg-8">
+                    <div class="card card-premium shadow-sm">
+                        <div class="card-header bg-dark text-white py-3">
+                            <h5 class="mb-0 fw-bold"><i class="fa-solid fa-images me-2"></i> Saved Badge Designs</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if templates %}
+                                <div class="row g-3">
+                                    {% for t in templates %}
+                                        <div class="col-md-6">
+                                            <div class="card border p-3 shadow-sm h-100 position-relative" style="border-left: 6px solid {{ t.border_color }} !important;">
+                                                <h5 class="fw-bold mb-1" style="color: {{ t.font_color }}">{{ t.title }}</h5>
+                                                <p class="text-muted small mb-3">{{ t.badge_description }}</p>
+                                                
+                                                <div class="d-flex justify-content-between align-items-center mt-auto border-top pt-2">
+                                                    <span class="small text-muted">Borders: <code>{{ t.border_color }}</code></span>
+                                                    <span class="small text-muted">Font: <code>{{ t.font_color }}</code></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted text-center py-4 mb-0">No badge designs configured. Design your first template layout using the form!</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

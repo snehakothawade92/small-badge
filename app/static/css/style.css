@@ -1,0 +1,158 @@
+/* Web App Styling - SmallBadge System Design */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary-color: #1e293b;
+    --primary-light: #334155;
+    --accent-color: #d97706;
+    --accent-hover: #b45309;
+    --accent-glow: rgba(217, 119, 6, 0.2);
+    --bg-light: #f8fafc;
+    --bg-dark: #0f172a;
+    --text-primary: #1e293b;
+    --text-muted: #64748b;
+    --success-color: #166534;
+    --danger-color: #991b1b;
+    --border-color: #e2e8f0;
+    --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --card-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Master Layout Styling */
+.navbar-custom {
+    background-color: var(--primary-color);
+    box-shadow: var(--card-shadow);
+}
+.navbar-custom .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+.navbar-custom .navbar-brand span {
+    color: var(--accent-color);
+}
+.navbar-custom .nav-link {
+    color: #e2e8f0;
+    font-weight: 500;
+    transition: var(--transition);
+}
+.navbar-custom .nav-link:hover {
+    color: var(--accent-color);
+}
+
+/* Main Cards - Premium Glassmorphism & Shadow details */
+.card-premium {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    overflow: hidden;
+}
+.card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-lg);
+}
+
+/* Landing Page Search Box Glow */
+.search-glow-card {
+    border-radius: 16px;
+    border: 2px solid var(--border-color);
+    transition: var(--transition);
+}
+.search-glow-card:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+/* Custom Buttons */
+.btn-accent {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: var(--transition);
+}
+.btn-accent:hover {
+    background-color: var(--accent-hover);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
+}
+
+/* Dashboard Sidebar Styling */
+.sidebar {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    min-height: calc(100vh - 56px);
+    padding-top: 20px;
+}
+.sidebar .nav-link {
+    color: #cbd5e1;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 4px 10px;
+    transition: var(--transition);
+}
+.sidebar .nav-link:hover, .sidebar .nav-link.active {
+    background-color: var(--primary-light);
+    color: #ffffff;
+    border-left: 4px solid var(--accent-color);
+}
+
+/* Digital Badge visual preview structure */
+.badge-frame {
+    border-radius: 16px;
+    padding: 24px;
+    background: #ffffff;
+    position: relative;
+    box-shadow: var(--card-shadow-lg);
+    text-align: center;
+}
+.badge-frame-inner {
+    border: 4px dashed;
+    border-radius: 12px;
+    padding: 20px;
+}
+.badge-stamp {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 2.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Footer Styling */
+footer {
+    background-color: var(--primary-color);
+    color: #94a3b8;
+    padding: 20px 0;
+    margin-top: auto;
+}
+footer a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: var(--transition);
+}
+footer a:hover {
+    color: var(--accent-color);
+}

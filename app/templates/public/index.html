@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Credentials - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row align-items-center justify-content-between g-5">
+        <!-- Brand Message -->
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-extrabold text-dark mb-3">
+                Secure & Verifiable <br><span class="text-warning">Digital Badges</span>
+            </h1>
+            <p class="fs-5 text-muted leading-relaxed mb-4">
+                SmallBadge is a cryptographically secured badging platform allowing colleges, universities, and tech institutes to issue tamper-proof achievements that employers can instantly verify.
+            </p>
+            <div class="d-flex gap-3">
+                <a href="{{ url_for('auth.register_org') }}" class="btn btn-accent btn-lg px-4"><i class="fa-solid fa-square-plus me-2"></i> Register Organization</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-dark btn-lg px-4"><i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Member Login</a>
+            </div>
+        </div>
+
+        <!-- Search Card -->
+        <div class="col-lg-5">
+            <div class="card card-premium p-4 shadow-lg search-glow-card">
+                <div class="text-center mb-3">
+                    <div class="badge-stamp mb-2">
+                        <i class="fa-solid fa-signature"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark mb-1">Verify a Badge</h3>
+                    <p class="text-muted small">Enter the unique Badge Hash ID below</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('public.verify_badge_post') }}">
+                    <div class="mb-4">
+                        <label for="badge_id" class="form-label fw-bold">Badge Hash ID</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-hashtag text-muted"></i></span>
+                            <input type="text" name="badge_id" id="badge_id" class="form-control" placeholder="e.g. b3d5e8f81a7d620fc1184a44b1c2b5..." required>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-accent btn-lg">
+                            <i class="fa-solid fa-magnifying-glass me-2"></i> Verify Authenticity
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Pillars Section -->
+    <div class="row text-center mt-5 pt-5 border-top g-4">
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="fa-solid fa-shield-halved text-success fa-3x mb-3"></i>
+                <h4 class="fw-bold">Anti-Forgery Design</h4>
+                <p class="text-muted small">Every badge generates a unique cryptographic hash verification footprint inside our MongoDB cluster.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="fa-solid fa-qrcode text-warning fa-3x mb-3"></i>
+                <h4 class="fw-bold">Instant Scan QR</h4>
+                <p class="text-muted small">Instantly inspect validation status on mobile browsers by scanning the embedded certificate QR.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="fa-solid fa-share-nodes text-primary fa-3x mb-3"></i>
+                <h4 class="fw-bold">Direct Portfolio Sync</h4>
+                <p class="text-muted small">Students login to their direct student portal dashboard to fetch certificates and share links on social profiles.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

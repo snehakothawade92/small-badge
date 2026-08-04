@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Issue Badge - SmallBadge{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3 col-lg-2 sidebar rounded mb-4">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.dashboard') }}"><i class="fa-solid fa-gauge me-2"></i> Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.courses') }}"><i class="fa-solid fa-book-open me-2"></i> Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.students') }}"><i class="fa-solid fa-users me-2"></i> Students List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('org.templates') }}"><i class="fa-solid fa-palette me-2"></i> Design Templates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('org.issue_badge') }}"><i class="fa-solid fa-circle-plus me-2"></i> Issue Badge</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Badge Issuing Content -->
+        <div class="col-md-9 col-lg-7 mx-auto">
+            <div class="card card-premium p-4 shadow-lg my-4">
+                <div class="text-center mb-4">
+                    <div class="badge-stamp mb-2">
+                        <i class="fa-solid fa-certificate text-white"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark">Issue Digital Badge</h2>
+                    <p class="text-muted">Confer a digital achievement badge to an enrolled student</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('org.issue_badge') }}">
+                    <!-- Select Student -->
+                    <div class="mb-3">
+                        <label for="student_id" class="form-label fw-bold">Select Student</label>
+                        <select name="student_id" id="student_id" class="form-select" required>
+                            <option value="" disabled selected>-- Select Recipient --</option>
+                            {% for s in students %}
+                                <option value="{{ s._id }}">{{ s.name }} ({{ s.roll_number }}) - {{ s.email }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text small">Student profile email will be registered for credentials access.</div>
+                    </div>
+                    
+                    <!-- Select Course -->
+                    <div class="mb-3">
+                        <label for="course_id" class="form-label fw-bold">Select Course / Achievement Program</label>
+                        <select name="course_id" id="course_id" class="form-select" required>
+                            <option value="" disabled selected>-- Select Course --</option>
+                            {% for c in courses %}
+                                <option value="{{ c._id }}">{{ c.course_code }} - {{ c.course_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Select Template -->
+                    <div class="mb-3">
+                        <label for="template_id" class="form-label fw-bold">Select Badge Visual Layout Template</label>
+                        <select name="template_id" id="template_id" class="form-select" required>
+                            <option value="" disabled selected>-- Select Layout --</option>
+                            {% for t in templates %}
+                                <option value="{{ t._id }}">{{ t.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="alert alert-secondary small mt-4">
+                        <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i> 
+                        <strong>Note:</strong> Issuing this badge will immediately generate a cryptographically unique Badge Hash ID, render a landscape PDF certificate, and print a custom verification QR code.
+                    </div>
+                    
+                    <!-- Submit button -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-accent btn-lg py-2">
+                            Generate & Issue Badge <i class="fa-solid fa-arrow-right-to-bracket ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
